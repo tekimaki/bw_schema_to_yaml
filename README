@@ -1,0 +1,9 @@
+---
+usage: >
+  Run ./convert.php from the command line and 
+  a schema.yaml file will be created in <pkg>/admin/ 
+  for every package folder.
+
+  Once generated you will have to do some minor 
+  recorganization of the yaml if you want it to look
+  nice, just as moving version: to the top of the list
