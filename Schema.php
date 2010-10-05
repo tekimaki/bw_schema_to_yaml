@@ -52,5 +52,16 @@ class Schema extends BitInstaller{
 		unset( $pkgHash['path'] );	
 		unset( $pkgHash['dir'] );	
 		unset( $pkgHash['db_tables_found'] );	
+
+		require_once( LIBERTY_PKG_PATH.'LibertySystem.php' );
+		$LSys = new LibertySystem();
+		$LSys->loadContentTypes();
+		foreach( $LSys->mContentTypes as $ctype=>$data ) {
+			if( $data['handler_package'] == $pkg ){
+				$pkgHash['contenttypes'] = array(
+					$data['handler_class'] => $data['handler_file'];
+				);
+			}
+		}
 	}
 }
