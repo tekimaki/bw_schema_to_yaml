@@ -1,4 +1,5 @@
-<?php
+<?php /* -*- Mode: php; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4; -*- */
+/* vim: :set fdm=marker : */
 
 require_once( '../install/BitInstaller.php' );
 
@@ -6,6 +7,39 @@ class Schema extends BitInstaller{
 
 	function __construct(){
 		BitSystem::BitSystem();
+	}
+
+	function registerSchemaSequences( $pPackage, $pSeqHash ) {
+		$pPackage = strtolower( $pPackage ); // lower case for uniformity
+		if( empty( $this->mPackages[$pPackage]['sequences'] ) ){
+			$this->mPackages[$pPackage]['sequences'] = array();
+		}
+		$this->mPackages[$pPackage]['sequences'] = array_merge( $this->mPackages[$pPackage]['sequences'], $pSeqHash );
+	}
+
+	function registerServicePreferences( $pPackage, $pServiceGuid, $pContentTypes ) {
+		$pPackage = strtolower( $pPackage ); // lower case for uniformity
+		if( empty( $this->mServices[$pPackage][$pServiceGuid] ) ){
+			$this->mServices[$pPackage][$pServiceGuid] = array();
+		}
+		$this->mServices[$pPackage][$pServiceGuid] = array_merge( $this->mServices[$pPackage][$pServiceGuid], $pContentTypes );
+	}
+
+	function registerSchemaTable( $pPackage, $pTableName, $pDataDict, $pRequired=FALSE, $pTableOptions=NULL ) {
+		$pPackage = strtolower( $pPackage ); // lower case for uniformity
+		if( !empty( $pTableName ) ) {
+			$this->mPackages[$pPackage]['tables'][$pTableName] = $pDataDict;
+			if( !empty( $pTableOptions ) ) {
+				$this->mPackages[$pPackage]['tables']['options'][$pTableName] = $pTableOptions;
+			}
+		}
+	}
+
+	function registerSchemaConstraints( $pPackage, $pTableName, $pConstraints ) {
+		$pPackage = strtolower( $pPackage);
+		if( !empty( $pTableName ) ) {
+			$this->mPackages[$pPackage]['constraints'][$pTableName] = $pConstraints;
+		}
 	}
 
 	function registerUserPermissions( $pPackageName, $pUserpermissions ) {
@@ -59,7 +93,7 @@ class Schema extends BitInstaller{
 		foreach( $LSys->mContentTypes as $ctype=>$data ) {
 			if( $data['handler_package'] == $pkg ){
 				$pkgHash['contenttypes'] = array(
-					$data['handler_class'] => $data['handler_file'];
+					$data['handler_class'] => $data['handler_file']
 				);
 			}
 		}
