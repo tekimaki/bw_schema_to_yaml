@@ -1,6 +1,8 @@
 #!/usr/bin/php
 <?php /* -*- Mode: php; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4; -*- */
 
+global $gShellScript;
+$gShellScript = true;
 require_once( '../kernel/setup_inc.php' );
 require_once( UTIL_PKG_PATH.'spyc/spyc.php' );
 require_once( './Schema.php' );

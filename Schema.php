@@ -1,4 +1,5 @@
-<?php
+<?php /* -*- Mode: php; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4; -*- */
+/* vim: :set fdm=marker : */
 
 require_once( '../install/BitInstaller.php' );
 
@@ -8,9 +9,43 @@ class Schema extends BitInstaller{
 		BitSystem::BitSystem();
 	}
 
-	function registerUserPermissions( $pPackageName, $pUserpermissions ) {
+	function registerSchemaSequences( $pPackage, $pSeqHash ) {
+		$pPackage = strtolower( $pPackage ); // lower case for uniformity
+		if( empty( $this->mPackages[$pPackage]['sequences'] ) ){
+			$this->mPackages[$pPackage]['sequences'] = array();
+		}
+		$this->mPackages[$pPackage]['sequences'] = array_merge( $this->mPackages[$pPackage]['sequences'], $pSeqHash );
+	}
+
+	function registerServicePreferences( $pPackage, $pServiceGuid, $pContentTypes ) {
+		$pPackage = strtolower( $pPackage ); // lower case for uniformity
+		if( empty( $this->mServices[$pPackage][$pServiceGuid] ) ){
+			$this->mServices[$pPackage][$pServiceGuid] = array();
+		}
+		$this->mServices[$pPackage][$pServiceGuid] = array_merge( $this->mServices[$pPackage][$pServiceGuid], $pContentTypes );
+	}
+
+	function registerSchemaTable( $pPackage, $pTableName, $pDataDict, $pRequired=FALSE, $pTableOptions=NULL ) {
+		$pPackage = strtolower( $pPackage ); // lower case for uniformity
+		if( !empty( $pTableName ) ) {
+			$this->mPackages[$pPackage]['tables'][$pTableName] = $pDataDict;
+			if( !empty( $pTableOptions ) ) {
+				$this->mPackages[$pPackage]['tables']['options'][$pTableName] = $pTableOptions;
+			}
+		}
+	}
+
+	function registerSchemaConstraints( $pPackage, $pTableName, $pConstraints ) {
+		$pPackage = strtolower( $pPackage);
+		if( !empty( $pTableName ) ) {
+			$this->mPackages[$pPackage]['constraints'][$pTableName] = $pConstraints;
+		}
+	}
+
+	function registerUserPermissions( $pPackage, $pUserpermissions ) {
+		$pPackage = strtolower( $pPackage ); // lower case for uniformity
 		foreach( $pUserpermissions as $perm ) {
-			$this->mPackages[$perm[3]]['permissions'][$perm[0]]=array(
+			$this->mPackages[$pPackage]['permissions'][$perm[0]]=array(
 				'description'=>$perm[1],
 				'level'=>$perm[2],
 				);
