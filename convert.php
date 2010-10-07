@@ -7,7 +7,11 @@ require_once( './Schema.php' );
 
 global $gBitSmarty, $gBitInstaller;
 
-$excludePkgs = array('pkgmkr'); // array('kernel','liberty','users','accounts');
+// USE THESE TO EITHER LIMIT A LIST OF ALL OR TO DEFINE A SHORT LIST
+// @see the foreach loop below to switch which you want to use
+// default uses include
+$excludePkgs = array('pkgmkr'); // array('kernel','liberty','users' );
+$includePkgs = array('liberty');
 
 $gBitInstaller = new Schema();
 
@@ -21,7 +25,9 @@ chdir(BIT_ROOT_PATH);
 
 // render all schema files
 foreach( $gBitInstaller->mPackages as $package=>$packageHash ) {
-	if( !in_array( $package, $excludePkgs ) ){
+	// CHANGE THIS IF YOU WANT TO EXCLUDE OR INCLUDE
+	//if( !in_array( $package, $excludePkgs ) ){
+	if( in_array( $package, $includePkgs ) ){
 
 		$filename = (!empty($packageHash['dir'])?$packageHash['dir']:$package).'/admin/schema.yaml';
 		$gBitInstaller->cleanPackageHash( $package, $packageHash );

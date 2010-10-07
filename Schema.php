@@ -59,7 +59,7 @@ class Schema extends BitInstaller{
 		foreach( $LSys->mContentTypes as $ctype=>$data ) {
 			if( $data['handler_package'] == $pkg ){
 				$pkgHash['contenttypes'] = array(
-					$data['handler_class'] => $data['handler_file'];
+					$data['handler_class'] => $data['handler_file'],
 				);
 			}
 		}
