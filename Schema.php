@@ -42,9 +42,10 @@ class Schema extends BitInstaller{
 		}
 	}
 
-	function registerUserPermissions( $pPackageName, $pUserpermissions ) {
+	function registerUserPermissions( $pPackage, $pUserpermissions ) {
+		$pPackage = strtolower( $pPackage ); // lower case for uniformity
 		foreach( $pUserpermissions as $perm ) {
-			$this->mPackages[$perm[3]]['permissions'][$perm[0]]=array(
+			$this->mPackages[$pPackage]['permissions'][$perm[0]]=array(
 				'description'=>$perm[1],
 				'level'=>$perm[2],
 				);
