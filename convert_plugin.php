@@ -8,7 +8,8 @@ require_once( './Schema.php' );
 
 global $gBitSmarty, $gBitInstaller;
 
-$excludePkgs = array('pkgmkr'); // array('kernel','liberty','users','accounts');
+$excludePkgs = array('pkgmkr'); // array('kernel','liberty','users' );
+$includePkgs = array('accounts');
 
 $gBitInstaller = new Schema();
 
@@ -23,7 +24,9 @@ chdir(BIT_ROOT_PATH);
 // render all schema files
 // Open a known directory, and proceed to read its contents
 foreach( $gBitInstaller->mPackages as $package=>$packageHash ) {
-	if( !in_array( $package, $excludePkgs ) ){
+	// CHANGE THIS IF YOU WANT TO EXCLUDE OR INCLUDE
+	//if( !in_array( $package, $excludePkgs ) ){
+	if( in_array( $package, $includePkgs ) ){
 		global $gLibertySystem;		
 		$paths = $gLibertySystem->getPackagePluginPaths($package);		
 		foreach ($paths as $dir) {
@@ -44,7 +47,9 @@ foreach( $gBitInstaller->mPackages as $package=>$packageHash ) {
 									$filename = $dir.'/'.$file.'/schema.yaml';
 									$gBitInstaller->cleanPackageHash( $package, $gBitInstaller->mPackages[$package] );
 									unset($gBitInstaller->mPackages[$package]['contenttypes']);
-									$gBitInstaller->mPackages[$package]['plugin'] = $gBitInstaller->mServices[$package];
+									foreach( $gBitInstaller->mServices[$package] as $service=>$content_type_guids){
+										$gBitInstaller->mPackages[$package]['services'][$service]['content_types'] = $content_type_guids; 
+									}
 									$content = Spyc::YAMLDump(array( $file => $gBitInstaller->mPackages[$package] ) );
 									
 									
