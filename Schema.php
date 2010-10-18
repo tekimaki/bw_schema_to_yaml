@@ -91,12 +91,14 @@ class Schema extends BitInstaller{
 		require_once( LIBERTY_PKG_PATH.'LibertySystem.php' );
 		$LSys = new LibertySystem();
 		$LSys->loadContentTypes();
+		$contenttypes = array();
 		foreach( $LSys->mContentTypes as $ctype=>$data ) {
 			if( $data['handler_package'] == $pkg ){
-				$pkgHash['contenttypes'] = array(
-					$data['handler_class'] => $data['handler_file'],
-				);
+				$contenttypes[$data['handler_class']] = $data['handler_file'];
 			}
+		}
+		if(!empty($contenttypes)){
+			$pkgHash['contenttypes'] = $contenttypes;
 		}
 	}
 }
